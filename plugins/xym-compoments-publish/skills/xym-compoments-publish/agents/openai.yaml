@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xym Compoments Publish"
+  short_description: "检查发布参数并安全发布本机 CocoaPods 组件"
+  default_prompt: "使用 $xym-compoments-publish 检查当前 CocoaPods 组件的混淆、发布信息和环境，确认后再发布。"

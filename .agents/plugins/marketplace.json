@@ -1,0 +1,20 @@
+{
+  "name": "xuyiming-workshop",
+  "interface": {
+    "displayName": "Xuyiming Workshop"
+  },
+  "plugins": [
+    {
+      "name": "xym-compoments-publish",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-compoments-publish"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    }
+  ]
+}
