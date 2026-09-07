@@ -1,0 +1,13 @@
+{
+  "name": "xuyiming-workshop",
+  "description": "Xuyiming 的个人开发工具插件市场，提供本机 CocoaPods 组件发布技能。",
+  "owner": {
+    "name": "Xuyiming"
+  },
+  "plugins": [
+    {
+      "name": "xym-compoments-publish",
+      "source": "./plugins/xym-compoments-publish"
+    }
+  ]
+}

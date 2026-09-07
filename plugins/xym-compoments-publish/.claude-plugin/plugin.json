@@ -1,0 +1,18 @@
+{
+  "name": "xym-compoments-publish",
+  "version": "0.1.1",
+  "description": "检查并安全发布本机 CocoaPods 组件，自动解析发布信息、混淆策略与测试/正式环境。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "keywords": [
+    "cocoapods",
+    "wukong",
+    "publish",
+    "ios",
+    "release"
+  ],
+  "skills": "./skills/"
+}
