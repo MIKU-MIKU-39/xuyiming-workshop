@@ -1,0 +1,4 @@
+interface:
+  display_name: "崩溃复现与修复"
+  short_description: "需要从 iOS 崩溃证据分析根因、编写稳定复现、实施修复或做加压回归时使用；区分诊断和修改授权，要求可观察失败与有界测试"
+  default_prompt: "使用 $crash-repro 处理当前项目的相关任务，先确认范围并遵守项目配置。"

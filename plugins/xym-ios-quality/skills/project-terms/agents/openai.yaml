@@ -1,0 +1,4 @@
+interface:
+  display_name: "项目术语检查"
+  short_description: "需要检查 iOS 源码或 Git 暂存区中的项目禁止术语、标识符命名规则时使用；不内置公司词库，不将匹配结果等同于商店审"
+  default_prompt: "使用 $project-terms 处理当前项目的相关任务，先确认范围并遵守项目配置。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "本地代码审查"
+  short_description: "需要审查本地 Git diff、检查逻辑回归、并发、内存、性能或资源风险时使用；证据驱动、只读，不自动修复或推送。"
+  default_prompt: "使用 $code-review 处理当前项目的相关任务，先确认范围并遵守项目配置。"

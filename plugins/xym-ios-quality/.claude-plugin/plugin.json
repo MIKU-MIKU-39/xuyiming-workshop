@@ -1,0 +1,18 @@
+{
+  "name": "xym-ios-quality",
+  "version": "0.1.0",
+  "description": "项目优先的 iOS 规则、格式化、术语检查、TDD、组件复用与 API 文档。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": [
+    "ios",
+    "quality",
+    "format",
+    "tdd"
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lark OKR"
+  short_description: "核实飞书 OKR 周期和目标，预览创建 KR 或更新进展的具体请求"
+  default_prompt: "使用 $lark-okr 为指定 KR 整理进展，先核实目标、正文和指标值，再预览写入计划。"

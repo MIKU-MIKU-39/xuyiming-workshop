@@ -1,0 +1,17 @@
+{
+  "name": "xym-visual-patch",
+  "version": "0.1.0",
+  "description": "通过本地网页框选截图并保存标注 JSON，回环鉴权，无 npm 或云端依赖。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": [
+    "screenshot",
+    "annotation",
+    "local"
+  ]
+}

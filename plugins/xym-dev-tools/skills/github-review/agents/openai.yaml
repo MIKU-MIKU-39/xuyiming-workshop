@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Review"
+  short_description: "查询完整 GitHub 评审线程，并在授权后按线程回复或解决反馈"
+  default_prompt: "使用 $github-review 检查指定 PR 的未解决评审线程，只分析，先不写入远端。"

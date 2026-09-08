@@ -1,6 +1,6 @@
 {
   "name": "xuyiming-workshop",
-  "description": "Xuyiming 的个人开发工具插件市场，提供本机 CocoaPods 组件发布技能。",
+  "description": "Xuyiming 的个人插件市场：组件发布、开发工具、iOS 工程、飞书、临时目录保护与截图标注。",
   "owner": {
     "name": "Xuyiming"
   },
@@ -8,6 +8,34 @@
     {
       "name": "xym-compoments-publish",
       "source": "./plugins/xym-compoments-publish"
+    },
+    {
+      "name": "xym-dev-tools",
+      "source": "./plugins/xym-dev-tools"
+    },
+    {
+      "name": "xym-lark-tools",
+      "source": "./plugins/xym-lark-tools"
+    },
+    {
+      "name": "xym-ios-build",
+      "source": "./plugins/xym-ios-build"
+    },
+    {
+      "name": "xym-ios-quality",
+      "source": "./plugins/xym-ios-quality"
+    },
+    {
+      "name": "xym-ios-diagnostics",
+      "source": "./plugins/xym-ios-diagnostics"
+    },
+    {
+      "name": "xym-tmp-guard",
+      "source": "./plugins/xym-tmp-guard"
+    },
+    {
+      "name": "xym-visual-patch",
+      "source": "./plugins/xym-visual-patch"
     }
   ]
 }

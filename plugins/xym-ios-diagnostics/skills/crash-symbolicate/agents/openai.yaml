@@ -1,0 +1,4 @@
+interface:
+  display_name: "崩溃符号化"
+  short_description: "收到 Apple IPS、dSYM 或未解析崩溃帧，需要本地校验 UUID/架构并符号化时使用；不猜测镜像或上传崩溃日志"
+  default_prompt: "使用 $crash-symbolicate 处理当前项目的相关任务，先确认范围并遵守项目配置。"

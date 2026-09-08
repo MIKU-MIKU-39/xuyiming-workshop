@@ -1,0 +1,33 @@
+{
+  "name": "xym-dev-tools",
+  "version": "0.1.0",
+  "description": "通用 Git/GitHub 开发工具、代码审查、简化、设计计划、安全提交与经验提炼。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "github",
+    "review",
+    "api"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Xym Dev Tools",
+    "shortDescription": "通用 Git/GitHub 工作流、代码审查、设计与经验提炼",
+    "longDescription": "在任意项目中采集变更、检查和处理 PR 线程，或按项目规范开展审查、设计与经验整理。",
+    "developerName": "Xuyiming",
+    "category": "Development",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "使用 $git-context 采集当前仓库的全部本地变更。",
+      "使用 $github-review 检查指定 PR 的未解决评审线程，先不要回复或关闭。"
+    ]
+  }
+}

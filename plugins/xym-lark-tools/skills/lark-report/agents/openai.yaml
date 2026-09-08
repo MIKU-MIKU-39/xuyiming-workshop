@@ -1,0 +1,4 @@
+interface:
+  display_name: "飞书周报与 OKR 报告"
+  short_description: "用户要求根据工作记录生成、更新或回填飞书周报/OKR 报告时使用；保留原始进度和引用结构，写入前预览并校验目标与文档版本"
+  default_prompt: "使用 $lark-report 处理当前项目的相关任务，先确认范围并遵守项目配置。"

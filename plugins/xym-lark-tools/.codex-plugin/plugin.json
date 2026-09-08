@@ -1,0 +1,34 @@
+{
+  "name": "xym-lark-tools",
+  "version": "0.1.0",
+  "description": "飞书文档、OKR 与周报工具，支持 XML 引用映射、按块更新、版本保护和写入预览。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "keywords": [
+    "lark",
+    "feishu",
+    "docs",
+    "okr",
+    "api"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Xym Lark Tools",
+    "shortDescription": "飞书文档、OKR 和周报，支持 XML 引用与写入预览",
+    "longDescription": "在用户授权范围内读取或更新飞书文档、KR 和进展；周报支持保留 XML 关联结构，执行后检查业务结果。",
+    "developerName": "Xuyiming",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "使用 $lark-docs 将本地 Markdown 同步到我指定的飞书文档，先预览更新计划。",
+      "使用 $lark-okr 为指定 KR 整理进展，先核实目标和进度值。"
+    ]
+  }
+}

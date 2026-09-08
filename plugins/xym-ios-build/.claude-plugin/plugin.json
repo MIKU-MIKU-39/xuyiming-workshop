@@ -1,0 +1,19 @@
+{
+  "name": "xym-ios-build",
+  "version": "0.1.0",
+  "description": "跨项目 iOS/macOS 构建、测试、Pods、结果摘要与 Proto 生成工作流。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": [
+    "ios",
+    "build",
+    "test",
+    "cocoapods",
+    "protobuf"
+  ]
+}

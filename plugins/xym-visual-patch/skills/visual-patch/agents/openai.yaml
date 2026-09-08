@@ -1,0 +1,4 @@
+interface:
+  display_name: "本地截图标注"
+  short_description: "用户明确希望打开截图标注界面、框选界面问题并保存修改说明时使用；本地网页与 JSON 流程，不自动读取剪贴板或上传截图。"
+  default_prompt: "使用 $visual-patch 处理当前项目的相关任务，先确认范围并遵守项目配置。"

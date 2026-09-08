@@ -15,6 +15,90 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Development"
+    },
+    {
+      "name": "xym-dev-tools",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-dev-tools"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    },
+    {
+      "name": "xym-lark-tools",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-lark-tools"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "xym-ios-build",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-ios-build"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    },
+    {
+      "name": "xym-ios-quality",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-ios-quality"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    },
+    {
+      "name": "xym-ios-diagnostics",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-ios-diagnostics"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    },
+    {
+      "name": "xym-tmp-guard",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-tmp-guard"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    },
+    {
+      "name": "xym-visual-patch",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-visual-patch"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
     }
   ]
 }

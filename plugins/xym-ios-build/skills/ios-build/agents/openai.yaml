@@ -1,0 +1,4 @@
+interface:
+  display_name: "iOS 构建与测试"
+  short_description: "在 iOS/macOS 项目编译、测试、归档，安装或更新 CocoaPods，执行 SwiftPM，读取 xcresul"
+  default_prompt: "使用 $ios-build 处理当前项目的相关任务，先确认范围并遵守项目配置。"

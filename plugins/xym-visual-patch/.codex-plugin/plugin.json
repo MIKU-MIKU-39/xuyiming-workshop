@@ -1,0 +1,31 @@
+{
+  "name": "xym-visual-patch",
+  "version": "0.1.0",
+  "description": "通过本地网页框选截图并保存标注 JSON，回环鉴权，无 npm 或云端依赖。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": [
+    "screenshot",
+    "annotation",
+    "local"
+  ],
+  "interface": {
+    "displayName": "Xym Visual Patch",
+    "shortDescription": "通过本地网页框选截图并保存标注 JSON，回环鉴权，无 npm 或云端依赖。",
+    "longDescription": "通过本地网页框选截图并保存标注 JSON，回环鉴权，无 npm 或云端依赖。 使用目标项目的路径与配置，执行前检查授权范围。",
+    "developerName": "Xuyiming",
+    "category": "Development",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "使用 $visual-patch 处理当前项目的相关任务。"
+    ]
+  }
+}

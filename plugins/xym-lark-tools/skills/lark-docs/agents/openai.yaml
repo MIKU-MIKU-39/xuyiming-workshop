@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lark Docs"
+  short_description: "通过本机飞书 CLI 读取和同步 Markdown 文档，先核实目标与写入计划"
+  default_prompt: "使用 $lark-docs 将本地 Markdown 同步到我指定的飞书文档，先读取目标并预览计划。"

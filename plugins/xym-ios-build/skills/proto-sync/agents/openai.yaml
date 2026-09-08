@@ -1,0 +1,4 @@
+interface:
+  display_name: "Proto 同步与生成"
+  short_description: "需要更新项目 proto 输入、同步明确的 proto submodule 或重新生成 Protobuf 代码时使用；先"
+  default_prompt: "使用 $proto-sync 处理当前项目的相关任务，先确认范围并遵守项目配置。"

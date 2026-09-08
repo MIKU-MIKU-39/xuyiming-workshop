@@ -1,0 +1,4 @@
+interface:
+  display_name: "符号引用扫描"
+  short_description: "需要查询 iOS 符号在源码、头文件、Framework/XCFramework 或静态库中的引用，评估改名/删除影响时"
+  default_prompt: "使用 $symbol-references 处理当前项目的相关任务，先确认范围并遵守项目配置。"

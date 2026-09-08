@@ -1,0 +1,26 @@
+<!doctype html>
+<!-- Xuyiming：无第三方依赖的本地截图标注界面。 -->
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xym Visual Patch</title>
+<style>
+body{margin:0;background:#11151d;color:#e8edf5;font:15px system-ui}header{padding:20px 28px;border-bottom:1px solid #30394a}h1{font-size:22px;margin:0 0 8px}main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;padding:24px}canvas{max-width:100%;height:auto;background:#fff;touch-action:none;cursor:crosshair}aside{min-width:0}button,textarea{font:inherit;border:1px solid #536079;border-radius:6px;padding:10px;background:#212b3a;color:inherit}button{cursor:pointer;margin:8px 6px 8px 0}textarea{width:100%;box-sizing:border-box;min-height:90px}#status{white-space:pre-wrap;overflow-wrap:anywhere;color:#9bd4bf}.item{padding:12px 0;border-bottom:1px solid #394152;white-space:pre-wrap;overflow-wrap:anywhere}small{color:#b4becd}@media(max-width:800px){main{grid-template-columns:1fr}}
+</style>
+<header><h1>Xym Visual Patch</h1><small>拖动框选 → 填写修改说明 → 添加标注 → 保存 JSON。图片和数据仅在本机处理。</small></header>
+<main><section><canvas aria-label="截图标注画布"></canvas></section><aside><label for="note">修改说明</label><textarea id="note" placeholder="例如：这里的标题与左侧对齐"></textarea><button id="add">添加标注</button><button id="undo">撤销最后一条</button><button id="save">保存 JSON</button><p id="status" role="status">加载中…</p><div id="list"></div></aside></main>
+<script>
+const token=new URLSearchParams(location.hash.slice(1)).get('token');
+history.replaceState(null,'',location.pathname);
+const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),status=document.querySelector('#status'),note=document.querySelector('#note');
+let picture, start, pending, annotations=[];
+async function api(path,options={}){const response=await fetch(path,{...options,headers:{Authorization:'Bearer '+token,...options.headers}});if(!response.ok)throw Error(await response.text());return response;}
+function point(event){const box=canvas.getBoundingClientRect();return{x:Math.min(canvas.width,Math.max(0,(event.clientX-box.left)*canvas.width/box.width)),y:Math.min(canvas.height,Math.max(0,(event.clientY-box.top)*canvas.height/box.height))};}
+function draw(){if(!picture)return;ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(picture,0,0,canvas.width,canvas.height);ctx.lineWidth=Math.max(2,canvas.width/450);[...annotations,...(pending?[pending]:[])].forEach((rect,index)=>{ctx.strokeStyle='#ff415c';ctx.strokeRect(rect.x,rect.y,rect.width,rect.height);ctx.font=`bold ${Math.max(16,canvas.width/45)}px system-ui`;ctx.fillStyle='#ff415c';ctx.fillText(String(index+1),rect.x+4,rect.y+Math.max(20,canvas.width/40));});}
+function render(){const list=document.querySelector('#list');list.replaceChildren();annotations.forEach((item,index)=>{const node=document.createElement('div');node.className='item';node.textContent=`${index+1}. ${item.text}`;list.append(node);});draw();}
+canvas.addEventListener('pointerdown',event=>{if(!picture)return;start=point(event);canvas.setPointerCapture(event.pointerId);});
+canvas.addEventListener('pointermove',event=>{if(!start)return;const end=point(event);pending={x:Math.min(start.x,end.x),y:Math.min(start.y,end.y),width:Math.abs(end.x-start.x),height:Math.abs(end.y-start.y)};draw();});
+canvas.addEventListener('pointerup',()=>{start=null;});canvas.addEventListener('pointercancel',()=>{start=null;pending=null;draw();});
+document.querySelector('#add').onclick=()=>{if(!pending||pending.width<1||pending.height<1||!note.value.trim()){status.textContent='请先框选区域并填写说明。';return;}annotations.push({...pending,text:note.value.trim()});pending=null;note.value='';render();status.textContent=`已添加 ${annotations.length} 条标注，尚未保存。`;};
+document.querySelector('#undo').onclick=()=>{pending=null;annotations.pop();render();status.textContent='已撤销，请重新保存需要保留的结果。';};
+document.querySelector('#save').onclick=async()=>{if(pending){status.textContent='当前框选尚未添加，请先添加标注。';return;}try{const result=await(await api('/annotations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({annotations})})).json();status.textContent=`已保存 ${result.count} 条标注：\n${result.saved}`;}catch(error){status.textContent=String(error);}};
+(async()=>{try{if(!token)throw Error('缺少会话令牌，请使用启动服务时的完整链接。');const meta=await(await api('/meta')).json();const blob=await(await api('/image')).blob();picture=new Image();const url=URL.createObjectURL(blob);await new Promise((resolve,reject)=>{picture.onload=resolve;picture.onerror=reject;picture.src=url;});canvas.width=meta.width;canvas.height=meta.height;draw();URL.revokeObjectURL(url);status.textContent=`${meta.name} · ${meta.width} × ${meta.height}`;}catch(error){status.textContent=String(error);}})();
+</script></html>

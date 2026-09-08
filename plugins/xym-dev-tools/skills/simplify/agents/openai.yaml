@@ -1,0 +1,4 @@
+interface:
+  display_name: "过度设计审查"
+  short_description: "用户要求检查过度设计、重复抽象、样板代码或简化债时使用；只审复杂度和维护成本，不与正确性审查混淆。"
+  default_prompt: "使用 $simplify 处理当前项目的相关任务，先确认范围并遵守项目配置。"

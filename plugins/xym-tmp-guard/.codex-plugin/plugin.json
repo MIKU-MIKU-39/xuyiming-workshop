@@ -1,0 +1,31 @@
+{
+  "name": "xym-tmp-guard",
+  "version": "0.1.0",
+  "description": "基于所有权和任务状态的临时目录管理，默认预览，不启用全局清理钩子。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": [
+    "temporary",
+    "safety",
+    "cleanup"
+  ],
+  "interface": {
+    "displayName": "Xym Tmp Guard",
+    "shortDescription": "基于所有权和任务状态的临时目录管理，默认预览，不启用全局清理钩子。",
+    "longDescription": "基于所有权和任务状态的临时目录管理，默认预览，不启用全局清理钩子。 使用目标项目的路径与配置，执行前检查授权范围。",
+    "developerName": "Xuyiming",
+    "category": "Development",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "使用 $tmp-guard 处理当前项目的相关任务。"
+    ]
+  }
+}

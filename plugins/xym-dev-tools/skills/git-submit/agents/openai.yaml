@@ -1,0 +1,4 @@
+interface:
+  display_name: "安全提交"
+  short_description: "用户明确要求整理 Git 提交、commit 或推送时使用；检查已有暂存内容与授权范围，沿用项目提交格式，不默认 add"
+  default_prompt: "使用 $git-submit 处理当前项目的相关任务，先确认范围并遵守项目配置。"

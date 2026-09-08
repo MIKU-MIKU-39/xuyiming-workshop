@@ -1,0 +1,4 @@
+interface:
+  display_name: "组件复用"
+  short_description: "在任意 iOS 项目做组件选型、实现、代码审查或迁移时使用；先检索项目已有组件和公开 API，再决定复用、适配或新增。"
+  default_prompt: "使用 $component-reuse 处理当前项目的相关任务，先确认范围并遵守项目配置。"

@@ -1,0 +1,34 @@
+{
+  "name": "xym-ios-build",
+  "version": "0.1.0",
+  "description": "跨项目 iOS/macOS 构建、测试、Pods、结果摘要与 Proto 生成工作流。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "skills": "./skills/",
+  "keywords": [
+    "ios",
+    "build",
+    "test",
+    "cocoapods",
+    "protobuf"
+  ],
+  "interface": {
+    "displayName": "Xym iOS Build",
+    "shortDescription": "跨项目 iOS/macOS 构建、测试、Pods、结果摘要与 Proto 生成工作流。",
+    "longDescription": "跨项目 iOS/macOS 构建、测试、Pods、结果摘要与 Proto 生成工作流。 使用目标项目的路径与配置，执行前检查授权范围。",
+    "developerName": "Xuyiming",
+    "category": "Development",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "使用 $ios-build 处理当前项目的相关任务。",
+      "使用 $proto-sync 处理当前项目的相关任务。"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "需求到实施计划"
+  short_description: "需要把模糊开发需求转成设计方案、比较选项或编写可执行实施计划时使用；优先项目证据，少量澄清，不重复索取已给出的批准。"
+  default_prompt: "使用 $design-plan 处理当前项目的相关任务，先确认范围并遵守项目配置。"

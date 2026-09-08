@@ -1,0 +1,4 @@
+interface:
+  display_name: "iOS 工程规则"
+  short_description: "在 iOS/Objective-C/Swift 开发或审查中确定跨项目工程约束时使用；优先项目规范，检查 API、线程、"
+  default_prompt: "使用 $ios-guidelines 处理当前项目的相关任务，先确认范围并遵守项目配置。"

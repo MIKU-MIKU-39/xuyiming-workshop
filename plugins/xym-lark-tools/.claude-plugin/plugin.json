@@ -1,0 +1,19 @@
+{
+  "name": "xym-lark-tools",
+  "version": "0.1.0",
+  "description": "飞书文档、OKR 与周报工具，支持 XML 引用映射、按块更新、版本保护和写入预览。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "license": "MIT",
+  "keywords": [
+    "lark",
+    "feishu",
+    "docs",
+    "okr",
+    "api"
+  ],
+  "skills": "./skills/"
+}
