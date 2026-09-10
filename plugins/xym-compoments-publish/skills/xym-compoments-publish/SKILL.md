@@ -1,11 +1,11 @@
 ---
 name: xym-compoments-publish
-description: Inspect and publish a local CocoaPods component with Wukong. Use when the user asks to publish/release a component, run `wukong pod publish`, or determine component release notes, obfuscation, and beta/production settings. Always confirm the resolved release settings immediately before publishing.
+description: Inspect and publish a local CocoaPods component with Wukong. Use when the user asks to publish/release a component, run `wukong pod publish`, or determine component release notes, obfuscation, and beta/production settings. On an explicit publish request, resolve the settings and publish without an additional confirmation.
 ---
 
 # Xym Compoments Publish
 
-Publish the CocoaPods component in the current local Git repository through Wukong. Treat publishing as an external, potentially partial mutation: inspect first, show the resolved settings, and require explicit user confirmation before invoking Wukong.
+Publish the CocoaPods component in the current local Git repository through Wukong. An explicit request to publish authorizes execution with the defaults below and any user-provided overrides. Inspect the repository, show a concise settings summary, and invoke Wukong directly without asking for a second confirmation. A request only to inspect parameters, prepare a command, or edit this skill does not authorize a component release. If the user explicitly asks to preview or confirm first, respect that request.
 
 ## Resolve release settings
 
@@ -19,9 +19,9 @@ Resolve the defaults as follows:
 
 If no reachable release node or no incremental commit is found, do not invent a release note. Ask the user to provide the last release ref or an explicit release note. If the repository is dirty, detached, lacks exactly one root-level `.podspec`, or Wukong is unavailable, report the condition and do not publish until it is addressed.
 
-## Confirmation
+## Release summary
 
-Before publishing, display exactly these decision fields prominently, followed by any blocking repository warnings:
+Before publishing, display these effective settings as a progress update, followed by any blocking repository warnings. This summary does not pause execution:
 
 ```text
 是否需要混淆：是/否（说明默认规则或用户覆盖）
@@ -29,11 +29,11 @@ Before publishing, display exactly these decision fields prominently, followed b
 发布环境：测试环境（--beta）/正式环境
 ```
 
-Also show the component name, podspec version, branch, current commit, last release node, incremental commit count, and a safely quoted command preview. Ask the user to confirm or edit the three decision fields. Keep the script-computed values as the confirmation baseline and keep any user-edited values separately as the effective release settings. A request to inspect, prepare, or create this skill is not approval to publish.
+Also show the component name, podspec version, branch, current commit, last release node, incremental commit count, and a safely quoted command preview. Keep user-provided overrides separate from generated defaults and use the overrides as the effective release settings. Do not ask whether to proceed when the user has already requested publishing.
 
 ## Publish
 
-Immediately before publishing, rerun `release_context.py`. Require the refreshed context to have no blocking warnings, then compare its repository path, component, podspec version, branch, `HEAD`, dirty state, last release node, incremental commits, generated defaults, and Wukong executable with the script-computed baseline saved when the user confirmed. Do not compare a refreshed default with a user override. If the baseline changed, show a refreshed plan and obtain confirmation again; otherwise publish with the separately stored effective settings.
+Immediately before publishing, rerun `release_context.py` and use its current results. Require no blocking warnings and verify that the repository and component still match the requested target. If release metadata changed, regenerate the release note and command using the refreshed context while preserving user overrides, show the updated summary, and proceed without a confirmation round. If the requested target or required settings cannot be determined, report the specific missing information instead of guessing.
 
 Build the Wukong invocation from fixed arguments rather than accepting arbitrary shell text:
 
@@ -46,6 +46,6 @@ wukong pod publish --note <release-note> [--beta] [--mixup]
 - Pass the release note as one quoted argument.
 - Execute from the repository root.
 
-Run the command only after explicit confirmation. Stream or summarize progress without exposing credentials. After completion, report the component, version, environment, Git commit, and the authoritative success or failure line.
+On a publish request, execute the command as soon as the checks pass. Do not stop at printing the command or displaying the settings. Stream or summarize progress without exposing credentials. After completion, report the component, version, environment, Git commit, and the authoritative success or failure line.
 
-Wukong can create tags, upload artifacts, or update Specs before a later stage fails. If the result is interrupted or ambiguous, inspect the resulting Git tags and Specs state and ask the user before retrying. Never retry a publish automatically.
+Wukong can create tags, upload artifacts, or update Specs before a later stage fails. If the result is interrupted or ambiguous, inspect the resulting Git tags and Specs state and report what completed and what remains uncertain. Do not automatically repeat an ambiguous publish; a retry requires a new user request.

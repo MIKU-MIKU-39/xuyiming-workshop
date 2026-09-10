@@ -105,11 +105,11 @@ claude plugin update xym-compoments-publish@xuyiming-workshop --scope user
 /xym-compoments-publish:xym-compoments-publish
 ```
 
-两端都会按技能说明检查发布信息、混淆策略和发布环境；实际发布前需要确认本次解析出的发布设置。
+两端都会按技能说明检查发布信息、混淆策略和发布环境；明确要求发布时，展示参数摘要后直接执行，无需二次确认。仅检查参数或编辑技能时不会触发发布。
 
 ## 插件
 
-- [xym-compoments-publish](plugins/xym-compoments-publish/README.md)：检查当前组件的增量发布信息、混淆策略与发布环境，确认后通过 Wukong 发布。
+- [xym-compoments-publish](plugins/xym-compoments-publish/README.md)：检查当前组件的增量发布信息、混淆策略与发布环境，检查通过后直接通过 Wukong 发布。
 - [xym-dev-tools](plugins/xym-dev-tools/README.md)：Git 上下文、GitHub 评审线程、代码审查、简化、设计计划、安全提交、经验提炼（7 个技能）。
 - [xym-lark-tools](plugins/xym-lark-tools/README.md)：文档、OKR、周报（3 个技能），支持 Markdown/XML、引用映射与块版本保护。
 - [xym-ios-build](plugins/xym-ios-build/README.md)：构建/测试/Pods/xcresult/覆盖率包装，Proto 生成（2 个技能）。
