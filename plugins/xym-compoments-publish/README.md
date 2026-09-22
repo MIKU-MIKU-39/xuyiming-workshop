@@ -20,6 +20,8 @@
 
 同意同步后，在选定工程的干净 develop 上拉取最新代码（只允许快进），更新 Podfile 的目标组件版本，以发布信息创建本地提交。**本地提交完成后再次询问是否推送**。不自动运行 pod install，不更改 Podfile.lock；工作区不干净、分支有未推送提交/分叉或 Podfile 使用动态版本时停止。
 
+从 0.2.1 起，主工程的完整提交说明直接使用组件本次更新日志（发布时的 `--note`），不再添加固定的版本升级标题。多行日志及备注原样保留；提交后校验内容，发现 hook 改写则停止，不自动修订或推送已有提交。
+
 默认本机路径是 `/Users/vshow/Desktop/Work/vone` 和 `/Users/vshow/Desktop/Work/poppo`，用户可明确覆盖。同步辅助脚本需要 Python 3.9+、Git 和 Ruby；Ripper 仅做静态语法检查，不执行 Podfile。
 
 ## 入口与资源

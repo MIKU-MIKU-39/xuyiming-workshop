@@ -132,7 +132,33 @@ class GitSyncTests(unittest.TestCase):
         self.assertEqual(result["base_commit"], self.head)
         self.assertEqual(self.remote_head(), self.head)
         self.assertEqual(self.git("diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"), "Podfile")
-        self.assertIn("修复图片；支持缓存", self.git("log", "-1", "--format=%B"))
+        self.assertEqual(self.git("log", "-1", "--format=%s"), "修复图片；支持缓存")
+        self.assertEqual(self.git("log", "-1", "--format=%B"), "修复图片；支持缓存")
+        self.assertEqual(self.git("status", "--porcelain"), "")
+
+    def test_multiline_release_note_is_the_complete_commit_message(self):
+        # 全局/项目 cleanup 设置不能悄悄丢弃更新日志中的备注行。
+        self.git("config", "commit.cleanup", "strip")
+        note = '修复图片加载\n\n新增 "勋章" 资源\n# 保留发布备注\n支持缓存；修复回调\n'
+        result = sync.sync_project(self.repo, "BTAssets", "2.VO-C", note, "origin", self.head)
+        self.assertEqual(result["status"], "committed")
+        self.assertEqual(self.git("log", "-1", "--format=%s"), "修复图片加载")
+        self.assertEqual(self.git("log", "-1", "--format=%B"), note.rstrip("\n"))
+        self.assertEqual(self.remote_head(), self.head)
+
+    def test_rewritten_commit_message_is_reported_without_amending_or_pushing(self):
+        original = sync.git
+        def rewrite_commit_message(repo, *args, **kwargs):
+            if args and args[0] == "commit":
+                # 模拟 hook 改写最终提交说明；仍由真实 Git 创建提交。
+                args = (*args[:-1], "hook rewrote the release note")
+            return original(repo, *args, **kwargs)
+        with patch.object(sync, "git", side_effect=rewrite_commit_message), \
+                self.assertRaisesRegex(sync.SyncError, "提交说明.*更新日志"):
+            self.execute()
+        self.assertEqual(self.git("log", "-1", "--format=%B"), "hook rewrote the release note")
+        self.assertEqual(self.git("rev-parse", "HEAD^1"), self.head)
+        self.assertEqual(self.remote_head(), self.head)
         self.assertEqual(self.git("status", "--porcelain"), "")
 
     def test_fetches_new_remote_commit_before_version_update(self):

@@ -182,7 +182,7 @@ def plan_sync(project, component, version, remote="origin"):
 
 def sync_project(project, component, version, note, remote, expected_develop):
     if not note.strip() or "\0" in note:
-        raise SyncError("提交正文需要本次组件的实际发布信息。")
+        raise SyncError("提交说明需要本次组件的实际更新日志。")
     plan = plan_sync(project, component, version, remote)
     if plan["develop_head"] != expected_develop:
         raise SyncError("develop 与预检快照不一致，请重新预检并确认。")
@@ -217,12 +217,15 @@ def sync_project(project, component, version, note, remote, expected_develop):
             git(repo, "show", ":Podfile", raw=True) != updated or
             git(repo, "diff", "--name-only") or git(repo, "rev-parse", "HEAD") != upstream):
         raise SyncError("暂存内容或 HEAD 在同步期间变化；保留当前修改，请人工检查。")
-    git(repo, "commit", "-m", f"chore(deps): update {component} to {version}", "-m", note)
+    # 更新日志本身就是提交说明，不添加版本升级标题，也不清理日志中的备注行。
+    git(repo, "commit", "--cleanup=verbatim", "-m", note)
     commit = git(repo, "rev-parse", "HEAD")
     if (git(repo, "rev-parse", "HEAD^1") != upstream or
             git(repo, "diff-tree", "--no-commit-id", "--name-only", "-r", "-z", commit) != "Podfile\0" or
             read_podfile(repo, commit) != updated):
         raise SyncError("提交结果与计划不符（可能受 hook 影响）；禁止推送，请检查本地提交。")
+    if git(repo, "log", "-1", "--format=%B") != note.rstrip("\n"):
+        raise SyncError("提交说明与组件更新日志不一致（可能被 hook 改写）；保留本地提交，禁止推送。")
     clean_repository(repo)
     result.update(status="committed", commit=commit)
     return result

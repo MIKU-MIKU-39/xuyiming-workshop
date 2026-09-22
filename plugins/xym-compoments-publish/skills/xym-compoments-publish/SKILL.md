@@ -57,3 +57,5 @@ After a verified successful release, read [references/project-sync.md](reference
 Ask whether to sync before changing any app repository. A component release request alone does not approve project sync. After approval, use `scripts/sync_projects.py` to fast-forward the selected clean `develop` branches, update only the component's Podfile version, and commit locally with the release note. Then ask separately whether to push those specific commits. Do not run `pod install`, change lockfiles, or automatically push. If the user declines sync, the component release is still complete.
 
 A request only to sync an already released version enters the same reference workflow without running Wukong again. Editing or upgrading this skill never authorizes a release or an app repository change.
+
+The app repository's complete commit message must be the component's actual release note itself (the note passed to Wukong), not a generic version-update title with the note relegated to the body. Preserve multiline notes and verify the resulting message before offering to push.

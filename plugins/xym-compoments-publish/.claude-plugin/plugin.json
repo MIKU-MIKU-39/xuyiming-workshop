@@ -1,6 +1,6 @@
 {
   "name": "xym-compoments-publish",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "检查并发布本机 CocoaPods 组件，发布后经确认同步 Vone/Poppo 工程版本，本地提交后单独确认推送。",
   "author": {
     "name": "Xuyiming",

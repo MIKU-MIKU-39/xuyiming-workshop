@@ -68,7 +68,9 @@ Podfile 处理规则：
 - 只改目标组件的字面量版本，只暂存/提交 Podfile；不运行 `pod install/update`，不改 Podfile.lock。
 - 版本已经一致则报告 `unchanged`，不创建空提交、不询问推送不存在的提交。
 
-提交标题为 `chore(deps): update <component> to <version>`，正文使用本次实际发布信息，保留其含义。报告脚本返回的 `commit`、`base_commit`、完整版本及工程路径。脚本检查提交仅含计划中的 Podfile 更新；提交失败时保留修改/暂存状态，不重置。
+主工程的完整提交说明直接使用本次组件更新日志，即发布时实际传给 Wukong `--note` 的内容。不要添加 `chore(deps): update ...`、组件名或版本号等固定标题，也不要只把日志放在正文中；单行日志直接成为提交标题，多行日志保留原有段落及备注。同步已发布版本时，使用该版本真实的更新日志；缺失则先获取或询问用户，不能根据主工程的版本号 diff 编造日志。
+
+脚本使用 `git commit --cleanup=verbatim -m <更新日志>`，提交后核对完整提交说明和 Podfile 差异。若 hook 改写说明则报告并停止，不自动 amend 或推送。报告脚本返回的 `commit`、`base_commit`、完整版本及工程路径；提交失败时保留修改/暂存状态，不重置。
 
 多个工程逐个执行；如果前一个已提交、后一个失败，准确报告部分完成及各工程状态，不回滚成功的本地提交、不盲目重试。失败工程修复后先重新预检。
 
@@ -79,7 +81,7 @@ Podfile 处理规则：
 对用户同意的工程，推送前再次核对：
 
 1. 工作区干净，当前分支仍为 develop，HEAD 等于刚才获批的 `commit`。
-2. 该提交只有 Podfile 的预期版本差异，父提交等于记录的 `base_commit`。
+2. 该提交只有 Podfile 的预期版本差异，父提交等于记录的 `base_commit`，完整提交说明与本次组件更新日志一致。
 3. 远端身份仍一致，fetch/push URL 指向同一目标；多 push URL、身份变化或无法确定时询问，不猜测。
 4. 通过 `git ls-remote --heads <remote> refs/heads/develop` 核实远端仍等于 `base_commit`。若前进、消失或改写，停止说明，不自动合并、重建提交或强推。
 
