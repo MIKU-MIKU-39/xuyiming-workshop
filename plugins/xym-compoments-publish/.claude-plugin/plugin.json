@@ -1,7 +1,7 @@
 {
   "name": "xym-compoments-publish",
-  "version": "0.1.2",
-  "description": "检查并安全发布本机 CocoaPods 组件，自动解析发布信息、混淆策略与测试/正式环境。",
+  "version": "0.2.0",
+  "description": "检查并发布本机 CocoaPods 组件，发布后经确认同步 Vone/Poppo 工程版本，本地提交后单独确认推送。",
   "author": {
     "name": "Xuyiming",
     "url": "https://github.com/MIKU-MIKU-39"

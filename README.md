@@ -17,6 +17,8 @@ xuyiming-workshop/
 │   │       └── xym-compoments-publish/   # 技能：具体发布流程
 │   │           ├── SKILL.md
 │   │           ├── scripts/release_context.py
+│   │           ├── scripts/sync_projects.py
+│   │           ├── references/project-sync.md
 │   │           └── agents/openai.yaml   # Codex 展示信息
 │   ├── xym-dev-tools/
 │   │   ├── .codex-plugin/plugin.json
@@ -47,6 +49,8 @@ xuyiming-workshop/
 ## 安装前提
 
 这是私有 GitHub 仓库，安装者需要仓库访问权限和有效的 Git HTTPS 凭据。插件均在本机执行，按需安装，不强制安装所有工具：组件发布需要 Git、Python 3、Wukong 和构建环境；公共开发工具需要 Python 3.9+、Git，GitHub 功能另需已登录的 `gh`；飞书真实调用需要官方 `lark-cli` 和用户授权，预览只需 Python。
+
+组件发布后的工程同步另需 Ruby 标准库 Ripper，用于静态检查 Podfile，不会加载或执行 Podfile。
 
 以下命令使用客户端原生命令；已使用 RTK 的环境可以添加 `rtk proxy` 前缀。
 
@@ -81,6 +85,8 @@ codex plugin add xym-compoments-publish@xuyiming-workshop
 
 安装完成后新建 Codex 任务，可通过技能选择器选择发布技能，或直接提出“使用 xym-compoments-publish 发布当前组件”。
 
+如果还存在 `~/.codex/skills/xym-compoments-publish` 的同名独立 skill，插件升级不会覆盖它。请在新任务中从插件选择器选择新版，或显式调用 `$xym-compoments-publish:xym-compoments-publish`，避免继续使用独立旧副本。仓库开发与推送本身不会修改已安装的 skill 或插件缓存，需用户执行升级命令才安装新版。
+
 ## Claude Code
 
 首次安装：
@@ -107,9 +113,11 @@ claude plugin update xym-compoments-publish@xuyiming-workshop --scope user
 
 两端都会按技能说明检查发布信息、混淆策略和发布环境；明确要求发布时，展示参数摘要后直接执行，无需二次确认。仅检查参数或编辑技能时不会触发发布。
 
+从发布插件 0.2.0 起，发布成功后另行询问是否同步 Vone/Poppo 的 develop Podfile（VO / PLA 后缀映射，无标识则询问工程）；同步生成本地提交后再单独询问是否推送。不同阶段的批准互不替代。
+
 ## 插件
 
-- [xym-compoments-publish](plugins/xym-compoments-publish/README.md)：检查当前组件的增量发布信息、混淆策略与发布环境，检查通过后直接通过 Wukong 发布。
+- [xym-compoments-publish](plugins/xym-compoments-publish/README.md)：检查增量发布信息、混淆策略与环境，通过 Wukong 发布后按需同步 Vone/Poppo 工程，推送单独确认。
 - [xym-dev-tools](plugins/xym-dev-tools/README.md)：Git 上下文、GitHub 评审线程、代码审查、简化、设计计划、安全提交、经验提炼（7 个技能）。
 - [xym-lark-tools](plugins/xym-lark-tools/README.md)：文档、OKR、周报（3 个技能），支持 Markdown/XML、引用映射与块版本保护。
 - [xym-ios-build](plugins/xym-ios-build/README.md)：构建/测试/Pods/xcresult/覆盖率包装，Proto 生成（2 个技能）。

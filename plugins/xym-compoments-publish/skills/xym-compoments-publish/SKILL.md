@@ -1,6 +1,6 @@
 ---
 name: xym-compoments-publish
-description: Inspect and publish a local CocoaPods component with Wukong. Use when the user asks to publish/release a component, run `wukong pod publish`, or determine component release notes, obfuscation, and beta/production settings. On an explicit publish request, resolve the settings and publish without an additional confirmation.
+description: Inspect and publish local CocoaPods components with Wukong, then offer to sync released versions into Vone/Poppo Podfiles on develop. Use for component releases, release settings, or post-release project version sync. Explicit publishing needs no second confirmation; project sync and pushing require separate approval.
 ---
 
 # Xym Compoments Publish
@@ -49,3 +49,11 @@ wukong pod publish --note <release-note> [--beta] [--mixup]
 On a publish request, execute the command as soon as the checks pass. Do not stop at printing the command or displaying the settings. Stream or summarize progress without exposing credentials. After completion, report the component, version, environment, Git commit, and the authoritative success or failure line.
 
 Wukong can create tags, upload artifacts, or update Specs before a later stage fails. If the result is interrupted or ambiguous, inspect the resulting Git tags and Specs state and report what completed and what remains uncertain. Do not automatically repeat an ambiguous publish; a retry requires a new user request.
+
+## Offer project version sync after success
+
+After a verified successful release, read [references/project-sync.md](references/project-sync.md). Collect every exact version actually published by this invocation; never derive a new version from the old podspec or invent a platform suffix. A suffix containing `VO` maps to Vone; a `PLA` suffix maps to Poppo. A single identified platform version is offered only to that platform. Unmarked or ambiguous versions require the user to choose the target project(s) and exact version mapping.
+
+Ask whether to sync before changing any app repository. A component release request alone does not approve project sync. After approval, use `scripts/sync_projects.py` to fast-forward the selected clean `develop` branches, update only the component's Podfile version, and commit locally with the release note. Then ask separately whether to push those specific commits. Do not run `pod install`, change lockfiles, or automatically push. If the user declines sync, the component release is still complete.
+
+A request only to sync an already released version enters the same reference workflow without running Wukong again. Editing or upgrading this skill never authorizes a release or an app repository change.

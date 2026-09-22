@@ -1,7 +1,7 @@
 {
   "name": "xym-compoments-publish",
-  "version": "0.1.2",
-  "description": "检查并安全发布本机 CocoaPods 组件，自动解析发布信息、混淆策略与测试/正式环境。",
+  "version": "0.2.0",
+  "description": "检查并发布本机 CocoaPods 组件，发布后经确认同步 Vone/Poppo 工程版本，本地提交后单独确认推送。",
   "author": {
     "name": "Xuyiming",
     "url": "https://github.com/MIKU-MIKU-39"
@@ -17,8 +17,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Xym Compoments Publish",
-    "shortDescription": "检查发布参数并安全发布 CocoaPods 组件",
-    "longDescription": "通过 Wukong 发布本机 CocoaPods 组件；明确要求发布时，自动解析混淆策略、增量发布信息及测试或正式环境，检查通过后直接执行，无需二次确认。",
+    "shortDescription": "发布 CocoaPods 组件并按需同步工程版本",
+    "longDescription": "通过 Wukong 发布本机 CocoaPods 组件；解析混淆、增量发布信息和环境后直接发布。成功后询问是否按 VO/PLA 版本同步 Vone/Poppo 的 develop Podfile，使用发布信息本地提交，并另行询问是否推送。",
     "developerName": "Xuyiming",
     "category": "Development",
     "capabilities": [
@@ -26,7 +26,7 @@
       "Write"
     ],
     "defaultPrompt": [
-      "使用 $xym-compoments-publish 检查当前 CocoaPods 组件的发布参数，检查通过后直接发布，无需二次确认。"
+      "使用 $xym-compoments-publish 检查并发布当前组件，成功后询问是否同步对应工程，本地提交后再询问是否推送。"
     ],
     "brandColor": "#147EFB"
   }
