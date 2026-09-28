@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xym Weekly OKR"
+  short_description: "汇总本人上一完整周跨仓库提交，按四段式生成可追溯 OKR 周报，支持黑名单"
+  default_prompt: "使用 $xym-weekly-okr，根据我上一完整自然周的代码提交生成 OKR 周报，并应用仓库黑名单。"

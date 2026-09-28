@@ -36,6 +36,10 @@
     {
       "name": "xym-visual-patch",
       "source": "./plugins/xym-visual-patch"
+    },
+    {
+      "name": "xym-weekly-okr",
+      "source": "./plugins/xym-weekly-okr"
     }
   ]
 }

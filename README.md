@@ -36,7 +36,8 @@ xuyiming-workshop/
 │   ├── xym-ios-quality/                  # 项目规则、格式、术语、TDD、文档
 │   ├── xym-ios-diagnostics/              # dSYM、复现、引用、清理审计
 │   ├── xym-tmp-guard/                    # 可选：显式临时任务槽
-│   └── xym-visual-patch/                 # 可选：本地标注网页 + JSON
+│   ├── xym-visual-patch/                 # 可选：本地标注网页 + JSON
+│   └── xym-weekly-okr/                   # 本人跨仓库提交 → 四段式 OKR 周报
 ├── scripts/validate_marketplace.py       # 双端结构与一致性校验
 ├── tests/test_*.py                       # Git/API/原生工具包装/本地 HTTP 测试
 └── docs/cross-project-delivery.md        # 完整映射、能力与验证边界
@@ -74,6 +75,7 @@ codex plugin add xym-ios-diagnostics@xuyiming-workshop
 # 可选，不会自动启用全局 hook
 codex plugin add xym-tmp-guard@xuyiming-workshop
 codex plugin add xym-visual-patch@xuyiming-workshop
+codex plugin add xym-weekly-okr@xuyiming-workshop
 ```
 
 升级或重新安装：
@@ -125,8 +127,9 @@ claude plugin update xym-compoments-publish@xuyiming-workshop --scope user
 - [xym-ios-diagnostics](plugins/xym-ios-diagnostics/README.md)：符号化、崩溃复现、符号引用、无用代码审计（4 个技能）。
 - [xym-tmp-guard](plugins/xym-tmp-guard/README.md)：可选的临时目录生命周期与清理（1 个技能），无自动清理 hook。
 - [xym-visual-patch](plugins/xym-visual-patch/README.md)：可选的本地截图标注（1 个技能），纯 Python + HTML。
+- [xym-weekly-okr](plugins/xym-weekly-okr/README.md)：本人上周跨仓库提交采集与四段式 OKR 周报（1 个技能），支持黑名单和证据追溯，个人配置独立保存。
 
-共 8 个插件、25 个技能。公共工具来自本地 `baitu-workshop` 的通用部分，已移除环境专属路径与业务依赖，保留 MIT 来源声明；详见 [完整映射与交付边界](docs/cross-project-delivery.md) 和 [前期审计](docs/baitu-reuse-audit.md)。它们是 Skill + CLI 脚本插件，不额外启动 MCP 服务。插件可独立安装；iOS 工具优先目标项目配置，不强制公司技术栈。
+共 9 个插件、26 个技能。公共工具来自本地 `baitu-workshop` 的通用部分，已移除环境专属路径与业务依赖，保留 MIT 来源声明；详见 [完整映射与交付边界](docs/cross-project-delivery.md) 和 [前期审计](docs/baitu-reuse-audit.md)。它们是 Skill + CLI 脚本插件，不额外启动 MCP 服务。插件可独立安装；iOS 工具优先目标项目配置，不强制公司技术栈。
 
 ## 维护与校验
 

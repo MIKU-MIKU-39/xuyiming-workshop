@@ -1,0 +1,21 @@
+{
+  "name": "xym-weekly-okr",
+  "version": "0.1.0",
+  "description": "汇总本人上一完整自然周的跨仓库 Git 提交，支持黑名单，生成有证据依据的四段式 OKR 周报。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "keywords": ["okr", "weekly-report", "git", "productivity"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Xym Weekly OKR",
+    "shortDescription": "按本人跨仓库提交生成四段式 OKR 周报",
+    "longDescription": "按上一完整自然周采集本人提交，支持多个作者邮箱、仓库黑名单与跨分支去重；按本周进展、发现的问题、风险同步与资源支持、下周进度计划生成本地草稿，区分代码变更和验收上线。",
+    "developerName": "Xuyiming",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["使用 $xym-weekly-okr，根据我上周的代码提交生成 OKR 周报，并应用仓库黑名单。"]
+  }
+}

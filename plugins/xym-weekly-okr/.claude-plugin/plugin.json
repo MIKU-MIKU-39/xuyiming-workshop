@@ -1,0 +1,12 @@
+{
+  "name": "xym-weekly-okr",
+  "version": "0.1.0",
+  "description": "汇总本人上一完整自然周的跨仓库 Git 提交，支持黑名单，生成有证据依据的四段式 OKR 周报。",
+  "author": {
+    "name": "Xuyiming",
+    "url": "https://github.com/MIKU-MIKU-39"
+  },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "keywords": ["okr", "weekly-report", "git", "productivity"],
+  "skills": "./skills/"
+}
