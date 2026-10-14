@@ -1,6 +1,6 @@
 ---
 name: xym-compoments-publish
-description: Inspect and publish local CocoaPods components with Wukong, then offer to sync released versions into Vone/Poppo Podfiles on develop. Use for component releases, release settings, or post-release project version sync. Explicit publishing needs no second confirmation; project sync and pushing require separate approval.
+description: Inspect and publish local CocoaPods components with Wukong, then offer to sync released versions into Vone/Poppo/DoraLive Podfiles on develop. Use for component releases, release settings, or post-release project version sync. Explicit publishing needs no second confirmation; project sync and pushing require separate approval.
 ---
 
 # Xym Compoments Publish
@@ -52,7 +52,7 @@ Wukong can create tags, upload artifacts, or update Specs before a later stage f
 
 ## Offer project version sync after success
 
-After a verified successful release, read [references/project-sync.md](references/project-sync.md). Collect every exact version actually published by this invocation; never derive a new version from the old podspec or invent a platform suffix. A suffix containing `VO` maps to Vone; a `PLA` suffix maps to Poppo. A single identified platform version is offered only to that platform. Unmarked or ambiguous versions require the user to choose the target project(s) and exact version mapping.
+After a verified successful release, read [references/project-sync.md](references/project-sync.md). Collect every exact version actually published by this invocation; never derive a new version from the old podspec or invent a platform suffix. A suffix containing `VO` maps to Vone; a `PLA` suffix maps to Poppo; a `DRL` suffix maps to DoraLive. Match PLA/DRL as dot- or hyphen-delimited markers, case-insensitively, and preserve the exact published version including any Swift suffix. A single identified platform version is offered only to that platform. Unmarked or ambiguous versions require the user to choose the target project(s) and exact version mapping. If the DoraLive repository path is not explicitly known, ask for it before sync; do not guess or clone a repository.
 
 Ask whether to sync before changing any app repository. A component release request alone does not approve project sync. After approval, use `scripts/sync_projects.py` to fast-forward the selected clean `develop` branches, update only the component's Podfile version, and commit locally with the release note. Then ask separately whether to push those specific commits. Do not run `pod install`, change lockfiles, or automatically push. If the user declines sync, the component release is still complete.
 

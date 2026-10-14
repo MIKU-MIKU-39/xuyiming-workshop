@@ -1,4 +1,4 @@
-# 发布后同步 Vone / Poppo
+# 发布后同步 Vone / Poppo / DoraLive
 
 维护：Xuyiming。完成组件发布后，或用户要求同步已经发布的组件版本时，读取本流程。
 
@@ -9,16 +9,17 @@
 只读分类（命令路径相对于本技能目录；版本参数可重复）：
 
 ```bash
-python3 scripts/sync_projects.py classify --version '104.b1.VO-SC' --version '104.b1.PLA-SC'
+python3 scripts/sync_projects.py classify --version '104.b1.VO-SC' --version '104.b1.PLA-SC' --version '104.b1.DRL-SC'
 ```
 
 | 本次实际版本 | 可建议的工程 |
 | --- | --- |
 | 后缀包含 VO，包括 `.VO-CF`、`.VO-SC`、`.VONE` | Vone |
 | 后缀包含 PLA 标识，例如 `.PLA-CF`、`.PLA-SC` | Poppo |
+| 后缀包含 DRL 标识，例如 `.DRL-CF`、`.DRL-SC`、`.DRL-SC.swift-6.3.3` | DoraLive |
 | 只有一个明确平台版本 | 只同步这个平台，不给另一平台合成版本 |
-| 没有平台标识，例如 `363` 或规则未覆盖的 `.POPPO` | 询问 Vone、Poppo，还是两个都同步 |
-| 同一版本同时标识两个平台、同平台多个版本、已知与未知版本混合 | 展示完整候选，请用户明确逐工程的版本映射 |
+| 没有平台标识，例如 `363` 或规则未覆盖的 `.POPPO` | 询问 Vone、Poppo、DoraLive 中需要同步哪些工程 |
+| 同一版本同时标识多个平台、同平台多个版本、已知与未知版本混合 | 展示完整候选，请用户明确逐工程的版本映射 |
 
 `needs_mapping=false` 只表示候选明确，**不表示用户同意同步**。即使只有一个无标识版本，也必须询问工程。不能为了匹配另一个工程而删除、替换或补齐版本后缀。
 
@@ -28,12 +29,13 @@ python3 scripts/sync_projects.py classify --version '104.b1.VO-SC' --version '10
 
 - Vone：`/Users/vshow/Desktop/Work/vone`
 - Poppo：`/Users/vshow/Desktop/Work/poppo`
+- DoraLive：同步前向用户确认实际 Git 根目录；不根据项目名推断路径。
 
 优先遵从用户在当前任务给出的路径和远端覆盖。路径不存在、仓库身份与目标不符、或不在这台 Mac 时，询问实际路径；不要根据名字搜索后自动选一个，不创建或克隆工程。
 
-展示组件、完整版本、工程路径、远端名、目标分支 `develop`、发布信息，并询问是否执行「拉取 develop → 更新 Podfile → 本地提交」。选项可包含各个可用工程、全部可用工程、不需要同步；无标识版本的选项为 Vone / Poppo / 两个 / 不同步。用户未回答时保持等待，不视为默认同意；不需要同步则结束。
+展示组件、完整版本、工程路径、远端名、目标分支 `develop`、发布信息，并询问是否执行「拉取 develop → 更新 Podfile → 本地提交」。选项可包含各个可用工程、全部可用工程、不需要同步；无标识版本可选择 Vone / Poppo / DoraLive 中的一个或多个。用户未回答时保持等待，不视为默认同意；不需要同步则结束。DRL 版本只建议同步 DoraLive，不为 Vone/Poppo 合成版本；同步批准和推送批准仍然分开。
 
-路径和映射确定后，可先做只读预检；双工程必须先分别预检通过。示例：
+路径和映射确定后，可先做只读预检；多个工程必须先分别预检通过。示例：
 
 ```bash
 python3 scripts/sync_projects.py plan \

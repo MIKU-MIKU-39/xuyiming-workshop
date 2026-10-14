@@ -26,7 +26,7 @@ class VersionTests(unittest.TestCase):
 
     def test_single_platform_never_invents_other_platform(self):
         result = sync.classify_versions(["104.b1.VO-SC", "104.b1.VO-SC"])
-        self.assertEqual(result["candidates"], {"vone": ["104.b1.VO-SC"], "poppo": []})
+        self.assertEqual(result["candidates"], {"vone": ["104.b1.VO-SC"], "poppo": [], "doralive": []})
         self.assertFalse(result["needs_mapping"])
 
     def test_conflicting_and_single_neutral_versions_require_mapping(self):
@@ -36,6 +36,25 @@ class VersionTests(unittest.TestCase):
     def test_version_input_cannot_contain_commands(self):
         with self.assertRaises(sync.SyncError):
             sync.classify_versions(["1'; system('evil')"])
+
+    def test_drl_maps_only_to_doralive_preserving_exact_version(self):
+        for version in ("104.b1.DRL-SC", "104.DRL-CF.swift-6.3.3", "104.drl"):
+            result = sync.classify_versions([version, version])
+            self.assertEqual(result["candidates"], {"vone": [], "poppo": [], "doralive": [version]})
+            self.assertFalse(result["needs_mapping"])
+
+    def test_three_platforms_are_independent(self):
+        result = sync.classify_versions(["104.VO-SC", "104.PLA-SC", "104.DRL-SC"])
+        self.assertEqual(result["candidates"]["doralive"], ["104.DRL-SC"])
+        self.assertFalse(result["needs_mapping"])
+
+    def test_drl_conflicts_and_unknown_markers_require_mapping(self):
+        for version in ("104.VO-DRL", "104.PLA-DRL", "104.VO-PLA-DRL"):
+            result = sync.classify_versions([version])
+            self.assertEqual(result["conflicting"], [version])
+            self.assertTrue(result["needs_mapping"])
+        for versions in (["104.DRL", "105.DRL"], ["104.DRL", "104"], ["104.XDRL"], ["104.DRLX"]):
+            self.assertTrue(sync.classify_versions(versions)["needs_mapping"])
 
 
 class PodfileTests(unittest.TestCase):
@@ -135,6 +154,15 @@ class GitSyncTests(unittest.TestCase):
         self.assertEqual(self.git("log", "-1", "--format=%s"), "修复图片；支持缓存")
         self.assertEqual(self.git("log", "-1", "--format=%B"), "修复图片；支持缓存")
         self.assertEqual(self.git("status", "--porcelain"), "")
+
+    def test_drl_sync_keeps_release_note_and_does_not_push(self):
+        version = "104.b1.DRL-SC.swift-6.3.3"
+        note = "支持 DoraLive；修复组件问题"
+        result = sync.sync_project(self.repo, "BTAssets", version, note, "origin", self.head)
+        self.assertEqual(result["status"], "committed")
+        self.assertEqual((self.repo / "Podfile").read_text(), "pod 'BTAssets', '" + version + "'\n")
+        self.assertEqual(self.git("log", "-1", "--format=%B"), note)
+        self.assertEqual(self.remote_head(), self.head)
 
     def test_multiline_release_note_is_the_complete_commit_message(self):
         # 全局/项目 cleanup 设置不能悄悄丢弃更新日志中的备注行。

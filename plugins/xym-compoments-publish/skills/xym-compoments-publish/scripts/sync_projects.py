@@ -21,17 +21,21 @@ def validate_version(version):
 
 
 def classify_versions(versions):
-    candidates = {"vone": [], "poppo": []}
+    candidates = {"vone": [], "poppo": [], "doralive": []}
     unmapped, conflicting = [], []
     for version in dict.fromkeys(versions):
         validate_version(version)
         suffix = version.partition(".")[2].upper()
         vone = "VO" in suffix
         poppo = bool(re.search(r"(?:^|[.-])PLA(?:[.-]|$)", suffix))
-        if vone and poppo:
+        # DRL 必须是独立后缀标识，保留完整版本；多平台标识不能静默选一个。
+        doralive = bool(re.search(r"(?:^|[.-])DRL(?:[.-]|$)", suffix))
+        platforms = [name for name, matched in (("vone", vone), ("poppo", poppo),
+                                               ("doralive", doralive)) if matched]
+        if len(platforms) > 1:
             conflicting.append(version)
-        elif vone or poppo:
-            candidates["vone" if vone else "poppo"].append(version)
+        elif platforms:
+            candidates[platforms[0]].append(version)
         else:
             unmapped.append(version)
     return {"candidates": candidates, "unmapped": unmapped, "conflicting": conflicting,
