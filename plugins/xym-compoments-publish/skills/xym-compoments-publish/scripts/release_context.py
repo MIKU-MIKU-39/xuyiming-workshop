@@ -140,9 +140,7 @@ def build_context(project_path: Path) -> dict[str, object]:
         last_release_source = "git_tag" if last_release_ref else None
 
     commits = collect_increment_commits(repository, last_release_ref) if last_release_ref else []
-    default_note = "；".join(
-        commit["subject"] for commit in commits if commit["subject"]
-    )
+    # 原始提交只作为证据；由技能做语义总结，不能把拼接或截断当成摘要。
     normalized_component = component.casefold()
     mixup = normalized_component not in MIXUP_EXEMPT_COMPONENTS
     warnings: list[str] = []
@@ -184,7 +182,8 @@ def build_context(project_path: Path) -> dict[str, object]:
                 if not mixup
                 else f"{component} uses the default obfuscation policy."
             ),
-            "note": default_note,
+            "note": None,
+            "note_requires_summary": bool(commits),
             "environment": "beta",
             "environment_flag": "--beta",
         },
