@@ -218,6 +218,169 @@ class GitSyncTests(unittest.TestCase):
             self.execute()
         self.assertIn("user-change", self.git("show", ":Podfile"))
 
+    def test_preserves_mixed_podfile_and_other_changes(self):
+        # 同一 Podfile 的已暂存和未暂存内容必须保留在各自层，不能混入发布提交。
+        staged = "# staged note\npod 'BTAssets', '1'\npod 'Other', '10'\n"
+        working = staged.replace("'10'", "'11'") + "# unstaged note\n"
+        (self.repo / "Podfile").write_text(staged)
+        (self.repo / "staged.txt").write_text("staged content")
+        self.git("add", "Podfile", "staged.txt")
+        (self.repo / "Podfile").write_text(working)
+        (self.repo / "staged.txt").write_text("working content")
+        (self.repo / "untracked.txt").write_text("keep untracked")
+        result = self.execute()
+        self.assertEqual(result["status"], "committed")
+        self.assertEqual(self.git("show", "HEAD:Podfile"), "pod 'BTAssets', '2.VO-C'")
+        self.assertEqual(self.git("show", ":Podfile"), staged.replace("'1'", "'2.VO-C'").rstrip())
+        self.assertEqual((self.repo / "Podfile").read_text(), working.replace("'1'", "'2.VO-C'"))
+        self.assertEqual(self.git("show", ":staged.txt"), "staged content")
+        self.assertEqual((self.repo / "staged.txt").read_text(), "working content")
+        self.assertEqual((self.repo / "untracked.txt").read_text(), "keep untracked")
+        self.assertEqual(self.git("diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"), "Podfile")
+        self.assertEqual(self.remote_head(), self.head)
+
+    def test_valid_local_target_version_change_is_not_overwritten(self):
+        for staged in (False, True):
+            with self.subTest(staged=staged):
+                (self.repo / "Podfile").write_text("pod 'BTAssets', '9'\n")
+                if staged:
+                    self.git("add", "Podfile")
+                before = (self.repo / ".git/index").read_bytes()
+                with self.assertRaises(sync.SyncError):
+                    self.execute()
+                self.assertEqual((self.repo / "Podfile").read_text(), "pod 'BTAssets', '9'\n")
+                self.assertEqual((self.repo / ".git/index").read_bytes(), before)
+                self.assertEqual(self.git("rev-parse", "HEAD"), self.head)
+
+    def test_dirty_develop_behind_remote_stops_without_mutation(self):
+        self.git("checkout", "-b", "publisher")
+        (self.repo / "remote.txt").write_text("upstream")
+        self.git("add", "remote.txt")
+        self.git("commit", "-m", "upstream")
+        self.git("push", "origin", "HEAD:develop")
+        self.git("checkout", "develop")
+        (self.repo / "user.txt").write_text("keep")
+        with self.assertRaises(sync.SyncError):
+            self.execute()
+        self.assertEqual(self.git("rev-parse", "HEAD"), self.head)
+        self.assertEqual((self.repo / "user.txt").read_text(), "keep")
+
+    def test_explicit_push_sends_only_release_commit_with_dirty_index(self):
+        (self.repo / "user.txt").write_text("do not publish")
+        self.git("add", "user.txt")
+        result = sync.sync_project(self.repo, "BTAssets", "2.VO-C", "更新资源", "origin", self.head, push=True)
+        self.assertTrue(result["pushed"])
+        self.assertEqual(self.remote_head(), result["commit"])
+        self.assertEqual(self.run_git(self.remote, "diff-tree", "--no-commit-id", "--name-only", "-r", "develop"), "Podfile")
+        self.assertEqual(self.git("show", ":user.txt"), "do not publish")
+        self.assertIn("A  user.txt", self.git("status", "--porcelain"))
+
+    def test_push_url_mismatch_blocks_before_commit(self):
+        self.git("remote", "set-url", "--push", "origin", str(self.base / "other.git"))
+        with self.assertRaises(sync.SyncError):
+            sync.sync_project(self.repo, "BTAssets", "2", "note", "origin", self.head, push=True)
+        self.assertEqual(self.git("rev-parse", "HEAD"), self.head)
+        self.assertEqual(self.remote_head(), self.head)
+
+    def test_remote_changes_before_push_stop_without_retry(self):
+        original = sync.git
+
+        def remote_advanced(repo, *args, **kwargs):
+            if args and args[0] == "ls-remote":
+                return "f" * 40 + "\trefs/heads/develop"
+            return original(repo, *args, **kwargs)
+
+        with patch.object(sync, "git", side_effect=remote_advanced), self.assertRaises(sync.SyncError):
+            sync.sync_project(self.repo, "BTAssets", "2", "note", "origin", self.head, push=True)
+        self.assertEqual(self.remote_head(), self.head)
+        self.assertEqual(self.git("rev-parse", "HEAD^"), self.head)
+
+    def test_dirty_noop_does_not_commit_or_push(self):
+        (self.repo / "user.txt").write_text("keep")
+        self.git("add", "user.txt")
+        result = sync.sync_project(self.repo, "BTAssets", "1", "note", "origin", self.head, push=True)
+        self.assertEqual(result["status"], "unchanged")
+        self.assertFalse(result["pushed"])
+        self.assertEqual(self.remote_head(), self.head)
+        self.assertIn("A  user.txt", self.git("status", "--porcelain"))
+
+    def test_dirty_plan_preserves_index_and_worktree_exactly(self):
+        staged = "# user staging\npod 'BTAssets', '1'\n"
+        (self.repo / "Podfile").write_text(staged)
+        self.git("add", "Podfile")
+        (self.repo / "Podfile").write_text(staged + "# user working\n")
+        before = (self.repo / ".git/index").read_bytes()
+        plan = sync.plan_sync(self.repo, "BTAssets", "2")
+        self.assertTrue(plan["local_changes"])
+        self.assertEqual((self.repo / ".git/index").read_bytes(), before)
+        self.assertEqual((self.repo / "Podfile").read_text(), staged + "# user working\n")
+        self.assertNotIn("# user", plan["diff"])
+
+    def test_dirty_local_state_is_preserved_when_fetch_discovers_advance(self):
+        self.git("checkout", "-b", "publisher")
+        (self.repo / "remote.txt").write_text("remote advance")
+        self.git("add", "remote.txt")
+        self.git("commit", "-m", "advance")
+        self.git("push", "origin", "HEAD:develop")
+        self.git("checkout", "develop")
+        self.git("update-ref", "refs/remotes/origin/develop", self.head)
+        (self.repo / "user.txt").write_text("keep")
+        self.git("add", "user.txt")
+        before = (self.repo / ".git/index").read_bytes()
+        with self.assertRaises(sync.SyncError):
+            self.execute()
+        self.assertEqual(self.git("rev-parse", "HEAD"), self.head)
+        self.assertEqual((self.repo / ".git/index").read_bytes(), before)
+        self.assertEqual((self.repo / "user.txt").read_text(), "keep")
+
+    def test_hook_failure_preserves_user_staging(self):
+        (self.repo / "user.txt").write_text("keep staged")
+        self.git("add", "user.txt")
+        before = (self.repo / ".git/index").read_bytes()
+        hooks = self.base / "hooks"
+        hooks.mkdir()
+        hook = hooks / "pre-commit"
+        hook.write_text("#!/bin/sh\nexit 1\n")
+        hook.chmod(0o755)
+        self.git("config", "core.hooksPath", str(hooks))
+        with self.assertRaises(sync.SyncError):
+            self.execute()
+        self.assertEqual((self.repo / ".git/index").read_bytes(), before)
+        self.assertEqual(self.git("rev-parse", "HEAD"), self.head)
+        self.assertIn("2.VO-C", (self.repo / "Podfile").read_text())
+        self.assertEqual(self.remote_head(), self.head)
+
+    def test_hook_sees_isolated_index_without_unrelated_staging(self):
+        (self.repo / "user.txt").write_text("keep staged")
+        self.git("add", "user.txt")
+        hooks = self.base / "hooks"
+        hooks.mkdir()
+        hook = hooks / "pre-commit"
+        hook.write_text('#!/bin/sh\ntest "$(git diff --cached --name-only)" = Podfile\n')
+        hook.chmod(0o755)
+        self.git("config", "core.hooksPath", str(hooks))
+        self.assertEqual(self.execute()["status"], "committed")
+        self.assertEqual(self.git("show", ":user.txt"), "keep staged")
+
+    def test_hook_added_unrelated_file_blocks_push(self):
+        (self.repo / "user.txt").write_text("must not push")
+        hooks = self.base / "hooks"
+        hooks.mkdir()
+        hook = hooks / "pre-commit"
+        hook.write_text("#!/bin/sh\ngit add user.txt\n")
+        hook.chmod(0o755)
+        self.git("config", "core.hooksPath", str(hooks))
+        with self.assertRaisesRegex(sync.SyncError, "禁止推送"):
+            sync.sync_project(self.repo, "BTAssets", "2", "note", "origin", self.head, push=True)
+        self.assertEqual(self.remote_head(), self.head)
+
+    def test_unusual_podfile_index_flags_block_without_changes(self):
+        self.git("update-index", "--assume-unchanged", "Podfile")
+        with self.assertRaises(sync.SyncError):
+            self.execute()
+        self.assertEqual(self.git("rev-parse", "HEAD"), self.head)
+        self.assertEqual((self.repo / "Podfile").read_text(), "pod 'BTAssets', '1'\n")
+
     def test_local_ahead_or_diverged_develop_stops(self):
         (self.repo / "local.txt").write_text("unrelated local commit")
         self.git("add", "local.txt")
