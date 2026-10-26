@@ -115,11 +115,11 @@ claude plugin update xym-compoments-publish@xuyiming-workshop --scope user
 
 两端都会按技能说明检查发布信息、混淆策略和发布环境；明确要求发布时，展示参数摘要后直接执行，无需二次确认。仅检查参数或编辑技能时不会触发发布。
 
-从发布插件 0.2.0 起，发布成功后另行询问是否同步 Vone/Poppo 的 develop Podfile（VO / PLA 后缀映射，无标识则询问工程）；同步生成本地提交后再单独询问是否推送。不同阶段的批准互不替代。
+从发布插件 0.2.4 起，发布成功后弹框选择「同步提交并推送」「仅提交」「不提交也不推送」。VO / PLA / DRL 分别对应 Vone / Poppo / DoraLive，无标识则先明确工程。只提交目标组件版本更新，保留主工程其他本地改动；选择第一项后不重复询问推送，未回答不写入主工程。
 
 ## 插件
 
-- [xym-compoments-publish](plugins/xym-compoments-publish/README.md)：检查增量发布信息、混淆策略与环境，通过 Wukong 发布后按需同步 Vone/Poppo 工程，推送单独确认。
+- [xym-compoments-publish](plugins/xym-compoments-publish/README.md)：检查发布信息、混淆策略与环境，发布后三选一同步 Vone/Poppo/DoraLive，只提交组件更新，保留其他改动。
 - [xym-dev-tools](plugins/xym-dev-tools/README.md)：Git 上下文、GitHub 评审线程、代码审查、简化、设计计划、安全提交、经验提炼（7 个技能）。
 - [xym-lark-tools](plugins/xym-lark-tools/README.md)：文档、OKR、周报（3 个技能），支持 Markdown/XML、引用映射与块版本保护。
 - [xym-ios-build](plugins/xym-ios-build/README.md)：构建/测试/Pods/xcresult/覆盖率包装，Proto 生成（2 个技能）。

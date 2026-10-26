@@ -1,4 +1,4 @@
 interface:
   display_name: "Xym Compoments Publish"
-  short_description: "发布 CocoaPods 组件并按需同步工程版本，本地提交后单独确认推送"
-  default_prompt: "使用 $xym-compoments-publish 检查并发布当前组件，成功后询问是否同步对应工程，本地提交后再询问是否推送。"
+  short_description: "发布组件后三选一同步、提交及推送，隔离主工程其他本地改动"
+  default_prompt: "使用 $xym-compoments-publish 发布当前组件，成功后弹框选择同步提交并推送、仅提交或不提交也不推送，并保留主工程其他本地改动。"

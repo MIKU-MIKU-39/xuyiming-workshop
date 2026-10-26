@@ -1,7 +1,7 @@
 {
   "name": "xym-compoments-publish",
-  "version": "0.2.3",
-  "description": "检查并发布本机 CocoaPods 组件，发布后经确认同步 Vone/Poppo/DoraLive 工程版本，本地提交后单独确认推送。",
+  "version": "0.2.4",
+  "description": "发布 CocoaPods 组件后，选择同步提交并推送、仅提交或跳过；隔离组件更新，保留主工程其他本地改动。",
   "author": {
     "name": "Xuyiming",
     "url": "https://github.com/MIKU-MIKU-39"

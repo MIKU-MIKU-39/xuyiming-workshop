@@ -1,6 +1,6 @@
 ---
 name: xym-compoments-publish
-description: Inspect and publish local CocoaPods components with Wukong, then offer to sync released versions into Vone/Poppo/DoraLive Podfiles on develop. Use for component releases, release settings, or post-release project version sync. Explicit publishing needs no second confirmation; project sync and pushing require separate approval.
+description: Inspect and publish local CocoaPods components with Wukong, then offer a three-way choice to sync and push, commit only, or skip Vone/Poppo/DoraLive project updates. Use for component releases, release settings, or post-release project version sync. Preserve unrelated local changes when committing component versions.
 ---
 
 # Xym Compoments Publish
@@ -56,8 +56,16 @@ Wukong can create tags, upload artifacts, or update Specs before a later stage f
 
 After a verified successful release, read [references/project-sync.md](references/project-sync.md). Collect every exact version actually published by this invocation; never derive a new version from the old podspec or invent a platform suffix. A suffix containing `VO` maps to Vone; a `PLA` suffix maps to Poppo; a `DRL` suffix maps to DoraLive. Match PLA/DRL as dot- or hyphen-delimited markers, case-insensitively, and preserve the exact published version including any Swift suffix. A single identified platform version is offered only to that platform. Unmarked or ambiguous versions require the user to choose the target project(s) and exact version mapping. If the DoraLive repository path is not explicitly known, ask for it before sync; do not guess or clone a repository.
 
-Ask whether to sync before changing any app repository. A component release request alone does not approve project sync. After approval, use `scripts/sync_projects.py` to fast-forward the selected clean `develop` branches, update only the component's Podfile version, and commit locally with the release note. Then ask separately whether to push those specific commits. Do not run `pod install`, change lockfiles, or automatically push. If the user declines sync, the component release is still complete.
+Before changing any app repository, show the target projects, exact versions and release note, then present a selection dialog with these three options, in this order:
+
+1. **同步提交并推送** — sync the component version, commit only this update, verify and push that exact commit. This selection authorizes both operations for the displayed targets; do not ask for push approval again.
+2. **仅提交** — sync and commit only this update locally, without pushing.
+3. **不提交也不推送** — skip project sync entirely; do not modify Podfiles, stage files, commit or push.
+
+Use `request_user_input_async` when available; it returns before the user's response, so wait for the actual answer before any sync. Use `request_user_input` only when available and allowed by the current mode, or the host's equivalent choice tool. If no selection UI is available, ask the same three choices in text. A preselected option, tool acknowledgment, absent answer or cancellation is not authorization. A release request alone does not approve project sync. Editing this skill must not display this business dialog or trigger a release.
+
+After the first or second choice, use `scripts/sync_projects.py sync` for the selected targets, adding `--push` **only** for the first choice. Generate the commit from a separate index so unrelated staged/unstaged/untracked changes, including other Podfile edits, remain local. Dirty projects must already be on an up-to-date `develop`; do not switch branches, fast-forward, stash or reset their changes. If the target component declaration itself was edited, stop rather than overwriting it. Clean projects may switch to `develop` and fast-forward. Do not run `pod install` or change lockfiles. A skipped or blocked project sync does not undo a successful component release.
 
 A request only to sync an already released version enters the same reference workflow without running Wukong again. Editing or upgrading this skill never authorizes a release or an app repository change.
 
-The app repository's complete commit message must be the component's actual release note itself (the note passed to Wukong), not a generic version-update title with the note relegated to the body. For a generated note, reuse the same short summary verbatim rather than expanding the original Git subjects or summarizing again. Preserve explicit user overrides and historical release notes, including multiline notes, and verify the resulting message before offering to push.
+The app repository's complete commit message must be the component's actual release note itself (the note passed to Wukong), not a generic version-update title with the note relegated to the body. For a generated note, reuse the same short summary verbatim rather than expanding the original Git subjects or summarizing again. Preserve explicit user overrides and historical release notes, including multiline notes, and verify the resulting message and component-only diff before any authorized push.

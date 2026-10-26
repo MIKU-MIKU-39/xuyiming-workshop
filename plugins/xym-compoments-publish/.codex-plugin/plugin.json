@@ -1,7 +1,7 @@
 {
   "name": "xym-compoments-publish",
-  "version": "0.2.3",
-  "description": "检查并发布本机 CocoaPods 组件，发布后经确认同步 Vone/Poppo/DoraLive 工程版本，本地提交后单独确认推送。",
+  "version": "0.2.4",
+  "description": "发布 CocoaPods 组件后，选择同步提交并推送、仅提交或跳过；隔离组件更新，保留主工程其他本地改动。",
   "author": {
     "name": "Xuyiming",
     "url": "https://github.com/MIKU-MIKU-39"
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "Xym Compoments Publish",
     "shortDescription": "发布 CocoaPods 组件并按需同步工程版本",
-    "longDescription": "通过 Wukong 发布本机 CocoaPods 组件；解析混淆、增量发布信息和环境后直接发布。成功后询问是否按 VO/PLA/DRL 版本同步 Vone/Poppo/DoraLive 的 develop Podfile，使用发布信息本地提交，并另行询问是否推送。",
+    "longDescription": "通过 Wukong 发布组件，成功后以三选一选择框决定同步提交并推送、仅提交或跳过。按 VO/PLA/DRL 同步 Vone/Poppo/DoraLive，只提交目标组件版本更新，保留其他已暂存和未暂存改动。",
     "developerName": "Xuyiming",
     "category": "Development",
     "capabilities": [
@@ -26,7 +26,7 @@
       "Write"
     ],
     "defaultPrompt": [
-      "使用 $xym-compoments-publish 检查并发布当前组件，成功后询问是否同步对应工程，本地提交后再询问是否推送。"
+      "使用 $xym-compoments-publish 发布当前组件，成功后弹框选择同步提交并推送、仅提交或不提交也不推送，并保留主工程其他本地改动。"
     ],
     "brandColor": "#147EFB"
   }

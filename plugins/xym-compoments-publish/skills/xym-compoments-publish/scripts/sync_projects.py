@@ -303,6 +303,7 @@ def sync_project(project, component, version, note, remote, expected_develop, pu
         mode = git(repo, "ls-tree", upstream, "--", "Podfile").split()[0]
         blob = git(repo, "hash-object", "-w", "--stdin", input_data=updated)
         git(repo, "update-index", "--cacheinfo", mode, blob, "Podfile", index=isolated_index)
+        expected_tree = git(repo, "write-tree", index=isolated_index)
         if (index_snapshot(repo) != snapshot["index"] or podfile.is_symlink() or
                 podfile.read_bytes() != snapshot["working"] or
                 git(repo, "rev-parse", "HEAD") != upstream or
@@ -312,7 +313,9 @@ def sync_project(project, component, version, note, remote, expected_develop, pu
         git(repo, "commit", "--cleanup=verbatim", "-m", note, index=isolated_index)
     commit = git(repo, "rev-parse", "HEAD")
     # 先验证树，再更新真实 index 的目标版本；不以整个工作文件覆盖已暂存版本。
-    if (git(repo, "rev-list", "--parents", "-n", "1", commit) != f"{commit} {upstream}" or
+    if (git(repo, "branch", "--show-current") != "develop" or
+            git(repo, "rev-parse", f"{commit}^{{tree}}") != expected_tree or
+            git(repo, "rev-list", "--parents", "-n", "1", commit) != f"{commit} {upstream}" or
             git(repo, "diff-tree", "--no-commit-id", "--name-only", "-r", "-z", commit) != "Podfile\0" or
             read_podfile(repo, commit) != updated or index_snapshot(repo) != snapshot["index"] or
             podfile.is_symlink() or podfile.read_bytes() != snapshot["working_updated"]):

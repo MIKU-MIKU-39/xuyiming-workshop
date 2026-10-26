@@ -14,11 +14,17 @@
 
 没有可用的发布基线或增量内容时，技能会要求明确发布信息。仓库状态变化、脏工作区、缺少 Wukong 等问题需要处理后再发布。具体执行规则以 `SKILL.md` 为准。
 
-## 发布后同步工程（0.2.0）
+## 发布后同步工程（0.2.4）
 
 发布成功后，技能会询问是否把本次实际版本同步到项目：后缀含 VO 对应 Vone，PLA 对应 Poppo，DRL 对应 DoraLive（0.2.2 起支持）；只有单个平台版本只建议同步对应工程。无平台标识时询问 Vone、Poppo、DoraLive 中需要同步哪些工程；版本有歧义时先明确映射，不合成版本号。DoraLive 的实际仓库路径须在同步前确认。
 
-同意同步后，在选定工程的干净 develop 上拉取最新代码（只允许快进），更新 Podfile 的目标组件版本，以发布信息创建本地提交。**本地提交完成后再次询问是否推送**。不自动运行 pod install，不更改 Podfile.lock；工作区不干净、分支有未推送提交/分叉或 Podfile 使用动态版本时停止。
+上传成功后弹出选择框，未回答不执行主工程写入：
+
+1. **同步提交并推送**：更新组件版本、只提交本次变更并推送，不重复询问。
+2. **仅提交**：更新组件版本、只创建本地提交，不推送。
+3. **不提交也不推送**：不修改主工程。
+
+使用独立暂存区生成组件更新提交，保留其他已暂存、未暂存、未跟踪内容，包括同一 Podfile 的不相关修改。已有改动的工程必须处于与远端一致的 develop；需要切分支/快进、目标组件声明被修改、分支有未推送提交/分叉或动态版本时停止，不 stash/reset。干净工程可切 develop 并快进。不运行 pod install，不更改 Podfile.lock。推送前校验仅包含本次组件更新、父节点和远端基线一致；真实 hook/签名失败或改写提交时停止并保留现场。
 
 从 0.2.3 起，默认发布信息由技能总结全部增量提交，不再拼接原始标题；1–4 指总结后的要点数，25 字上限包含标点、空格、英文和数字。脚本保留原始提交证据，默认 note 返回 null，需先生成摘要再发布；不会机械截断或虚构改动。用户明确指定的发布信息仍优先，不静默改写。
 
@@ -32,8 +38,8 @@
 - `.claude-plugin/plugin.json`：Claude Code 插件声明。
 - `skills/xym-compoments-publish/SKILL.md`：两端共用的技能入口。
 - `skills/xym-compoments-publish/scripts/release_context.py`：只读收集组件和发布设置。
-- `skills/xym-compoments-publish/scripts/sync_projects.py`：只读版本分类/预检，以及显式授权后的工程同步与本地提交；没有自动推送入口。
-- `skills/xym-compoments-publish/references/project-sync.md`：版本映射、工程同步及独立推送审批的完整流程。
+- `skills/xym-compoments-publish/scripts/sync_projects.py`：只读版本分类/预检、隔离同步与提交；只有明确选择第一项才传 `--push`。
+- `skills/xym-compoments-publish/references/project-sync.md`：版本映射、三选一授权、隔离提交及安全推送流程。
 - `skills/xym-compoments-publish/agents/openai.yaml`：Codex 技能展示名称、简介和默认提示词。
 
 安装与升级命令见[市场说明](../../README.md)。
