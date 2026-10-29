@@ -6,6 +6,10 @@
   },
   "plugins": [
     {
+      "name": "xym-iphone-duo-adapt",
+      "source": "./plugins/xym-iphone-duo-adapt"
+    },
+    {
       "name": "xym-compoments-publish",
       "source": "./plugins/xym-compoments-publish"
     },

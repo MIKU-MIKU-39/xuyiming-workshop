@@ -1,0 +1,9 @@
+{
+  "name": "xym-iphone-duo-adapt",
+  "version": "0.1.0",
+  "description": "最小侵入适配 iPhone Duo，保持原 UI；每 1–3 页由独立子 Agent 审核并完成 Duo/普通 iPhone 模拟器回归。",
+  "author": { "name": "Xuyiming", "url": "https://github.com/MIKU-MIKU-39" },
+  "repository": "https://github.com/MIKU-MIKU-39/xuyiming-workshop",
+  "keywords": ["ios", "iphone-duo", "uikit", "adaptive-layout", "ui-regression"],
+  "skills": "./skills/"
+}

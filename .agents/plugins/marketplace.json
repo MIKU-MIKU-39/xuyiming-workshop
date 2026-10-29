@@ -5,6 +5,18 @@
   },
   "plugins": [
     {
+      "name": "xym-iphone-duo-adapt",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xym-iphone-duo-adapt"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    },
+    {
       "name": "xym-compoments-publish",
       "source": {
         "source": "local",

@@ -9,6 +9,7 @@ xuyiming-workshop/
 ├── .agents/plugins/marketplace.json       # Codex 市场清单
 ├── .claude-plugin/marketplace.json        # Claude Code 市场清单
 ├── plugins/
+│   ├── xym-iphone-duo-adapt/              # 最小侵入适配 + 每批独立双机型回归
 │   ├── xym-compoments-publish/            # 插件：独立安装、独立版本
 │   │   ├── .codex-plugin/plugin.json     # Codex 插件声明
 │   │   ├── .claude-plugin/plugin.json    # Claude Code 插件声明
@@ -72,6 +73,7 @@ codex plugin add xym-lark-tools@xuyiming-workshop
 codex plugin add xym-ios-build@xuyiming-workshop
 codex plugin add xym-ios-quality@xuyiming-workshop
 codex plugin add xym-ios-diagnostics@xuyiming-workshop
+codex plugin add xym-iphone-duo-adapt@xuyiming-workshop
 # 可选，不会自动启用全局 hook
 codex plugin add xym-tmp-guard@xuyiming-workshop
 codex plugin add xym-visual-patch@xuyiming-workshop
@@ -119,6 +121,7 @@ claude plugin update xym-compoments-publish@xuyiming-workshop --scope user
 
 ## 插件
 
+- [xym-iphone-duo-adapt](plugins/xym-iphone-duo-adapt/README.md)：最小侵入适配 iPhone Duo，保持原 UI，每 1–3 页由独立子 Agent 代码审核及双机型模拟器回归。
 - [xym-compoments-publish](plugins/xym-compoments-publish/README.md)：检查发布信息、混淆策略与环境，发布后三选一同步 Vone/Poppo/DoraLive，只提交组件更新，保留其他改动。
 - [xym-dev-tools](plugins/xym-dev-tools/README.md)：Git 上下文、GitHub 评审线程、代码审查、简化、设计计划、安全提交、经验提炼（7 个技能）。
 - [xym-lark-tools](plugins/xym-lark-tools/README.md)：文档、OKR、周报（3 个技能），支持 Markdown/XML、引用映射与块版本保护。
@@ -129,7 +132,7 @@ claude plugin update xym-compoments-publish@xuyiming-workshop --scope user
 - [xym-visual-patch](plugins/xym-visual-patch/README.md)：可选的本地截图标注（1 个技能），纯 Python + HTML。
 - [xym-weekly-okr](plugins/xym-weekly-okr/README.md)：本人上周跨仓库提交采集与四段式 OKR 周报（1 个技能），支持黑名单和证据追溯，个人配置独立保存。
 
-共 9 个插件、26 个技能。公共工具来自本地 `baitu-workshop` 的通用部分，已移除环境专属路径与业务依赖，保留 MIT 来源声明；详见 [完整映射与交付边界](docs/cross-project-delivery.md) 和 [前期审计](docs/baitu-reuse-audit.md)。它们是 Skill + CLI 脚本插件，不额外启动 MCP 服务。插件可独立安装；iOS 工具优先目标项目配置，不强制公司技术栈。
+共 10 个插件、27 个技能。公共工具来自本地 `baitu-workshop` 的通用部分，已移除环境专属路径与业务依赖，保留 MIT 来源声明；详见 [完整映射与交付边界](docs/cross-project-delivery.md) 和 [前期审计](docs/baitu-reuse-audit.md)。它们是 Skill 或 Skill + CLI 脚本插件，不额外启动 MCP 服务。插件可独立安装；iOS 工具优先目标项目配置，不强制公司技术栈。
 
 ## 维护与校验
 

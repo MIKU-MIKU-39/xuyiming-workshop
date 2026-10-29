@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xym iPhone Duo Adapt"
+  short_description: "最小侵入适配 iPhone Duo，保持原 UI，每批独立审核和模拟器回归"
+  default_prompt: "使用 $xym-iphone-duo-adapt 以最小代码改动适配当前工程，保持原 UI，每完成 1–3 页由独立子 Agent 做代码审核和 iPhone Duo、普通 iPhone 模拟器回归。"
